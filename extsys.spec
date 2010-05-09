@@ -1,18 +1,14 @@
-%define name extsys
-%define version 0.2
-%define release %mkrel 1
-
 %define extsysdir %{_var}/lib/extsys
 %define mdvversion 2010.0
 
 Summary: External Mandriva build system
-Name: %{name}
-Version: %{version}
-Release: %{release}
+Name: extsys
+Version: 0.3
+Release: %mkrel 1
 Source0: http://git.fensystems.co.uk/release/%{name}/%{name}-%{version}.tar.bz2
 License: GPL
 Group: Development/Other
-BuildArchitectures: noarch
+BuildArch: noarch
 Requires: subversion-tools subversion-server bm mdvsys mdv-youri-submit
 Requires: genhdlist2
 Requires: mandriva-release-common = %{mdvversion}
@@ -82,6 +78,9 @@ fi
 %doc README
 
 %changelog
+* Sun May  9 2010 Michael Brown <mbrown@fensystems.co.uk> 0.3-1fs2010.0
+- Match what seems to be current Mandriva specfile usage
+
 * Sun May  9 2010 Michael Brown <mbrown@fensystems.co.uk> 0.2-1fs
 - Generate empty hdlist files on repository initialisation
 
