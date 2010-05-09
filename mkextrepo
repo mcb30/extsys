@@ -51,8 +51,10 @@ print "Creating distribution tree \"".$distname."\" in ".$distdir."\n"
 make_path ( catdir ( $distdir, "SRPMS", "contrib", "release" ),
 	    catdir ( $distdir, "i586", "media", "media_info" ),
 	    catdir ( $distdir, "i586", "media", "contrib", "release" ),
+	    catdir ( $distdir, "i586", "media", "debug_contrib", "release" ),
 	    catdir ( $distdir, "x86_64", "media", "media_info" ),
-	    catdir ( $distdir, "x86_64", "media", "contrib", "release" ) );
+	    catdir ( $distdir, "x86_64", "media", "contrib", "release" ),
+	    catdir ( $distdir, "x86_64", "media", "debug_contrib", "release" ));
 
 my $media_cfg = {};
 $media_cfg->{x86_64} = <<__END_MEDIA_CFG__;
@@ -119,4 +121,16 @@ foreach my $arch ( keys %$media_cfg ) {
       or die "Could not open ".$filename.": $!\n";
   syswrite $fh, $media_cfg->{$arch};
   close $fh;
+}
+
+my @hdlistdirs = ( catdir ( $distdir, "SRPMS", "contrib", "release" ) );
+foreach my $arch ( keys %$media_cfg ) {
+  foreach my $subdir qw ( contrib/release debug_contrib/release ) {
+    push @hdlistdirs, catdir ( $distdir, $arch, "media", $subdir );
+  }
+}
+foreach my $hdlistdir ( @hdlistdirs ) {
+  system ( "/usr/bin/genhdlist2", "--allow-empty-media", "--xml-info",
+	   "--quiet", $hdlistdir ) == 0
+	       or die "Could not generate empty hdlist: $?\n";
 }

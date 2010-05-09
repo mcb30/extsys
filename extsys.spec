@@ -1,6 +1,6 @@
 %define name extsys
-%define version 0.1
-%define release 1fs
+%define version 0.2
+%define release %mkrel 1
 
 %define extsysdir %{_var}/lib/extsys
 %define mdvversion 2010.0
@@ -14,6 +14,7 @@ License: GPL
 Group: Development/Other
 BuildArchitectures: noarch
 Requires: subversion-tools subversion-server bm mdvsys mdv-youri-submit
+Requires: genhdlist2
 Requires: mandriva-release-common = %{mdvversion}
 
 %description
@@ -81,5 +82,8 @@ fi
 %doc README
 
 %changelog
+* Sun May  9 2010 Michael Brown <mbrown@fensystems.co.uk> 0.2-1fs
+- Generate empty hdlist files on repository initialisation
+
 * Sun May  9 2010 Michael Brown <mbrown@fensystems.co.uk> 0.1-1fs
 - First packaged version
