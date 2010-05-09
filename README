@@ -1,0 +1,22 @@
+Mandriva package repository access
+==================================
+
+If you do not have a Mandriva ssh account, you can still obtain easy
+access to the Mandriva package repository by editing /etc/repsys.conf
+and configuring the following settings:
+
+  [global]
+  mirror = http://svn.mandriva.com/svn/packages/cooker
+  [log]
+  oldurl = http://svn.mandriva.com/svn/packages/misc
+
+It is then possible to check out and build packages (without the
+changelog) using e.g.
+
+  mdvsys co perl-IO-Null
+  cd perl-IO-Null
+  bm -l
+
+or to directly extract an SRPM (with changelog) using
+
+  mdvsys extract perl-IO-Null

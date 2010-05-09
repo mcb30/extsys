@@ -1,0 +1,30 @@
+#!/usr/bin/perl -w
+
+use File::Temp qw ( tempdir );
+use strict;
+use warnings;
+
+die "Syntax: $0 [options] target srpm" unless @ARGV >= 2;
+
+my $srpm = pop @ARGV;
+my $target = pop @ARGV;
+my @options = @ARGV;
+
+my $pkgdir = tempdir ( CLEANUP => 1 );
+
+my @bm = ( "/usr/bin/bm", "-l", "--move-srpm", $pkgdir, "--move-rpm", $pkgdir,
+	   "--clean", $srpm );
+system ( @bm ) == 0
+    or die ( "Could not build package using \"".join ( " ", @bm )."\": $?\n" );
+
+my @rpms = glob ( $pkgdir."/*.rpm" );
+print "Build RPMs: ".join ( " ", @rpms )."\n";
+
+my @youri_submit = ( "/usr/bin/perl", "-I/usr/share/mdv-youri-core/lib",
+		     "-I/usr/share/mdv-youri-submit/lib", 
+		     "/usr/share/mdv-youri-submit/bin/youri-submit",
+		     "--config", "/etc/youri/extsubmit.conf", @options,
+		     $target, @rpms );
+system ( @youri_submit ) == 0
+    or die ( "Could not copy packages to distribution tree using \"".
+	     join ( " ", @youri_submit )."\": $?\n" );

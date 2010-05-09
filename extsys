@@ -1,0 +1,12 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+my @args = @ARGV;
+if ( @args >= 1 ) {
+    ( my $action, my @remainder ) = @args;
+    @args = ( $action, "--config", "/etc/extsys.conf", @remainder );
+}
+
+exec ( "/usr/bin/mdvsys", @args );
